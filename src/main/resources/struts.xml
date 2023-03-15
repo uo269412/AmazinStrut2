@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.custom.i18n.resources" value="global" />
+	<package name="miw.Amazin" extends="struts-default">
+
+
+		<interceptors>
+			<interceptor name="login"
+				class="com.miw.presentation.login.LoginInterceptor" />
+			<interceptor-stack name="amazinLoginStack">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="login" />
+			</interceptor-stack>
+
+			<interceptor name="admin"
+				class="com.miw.presentation.login.AdminInterceptor" />
+			<interceptor-stack name="amazinAdminStack">
+				<interceptor-ref name="amazinLoginStack" />
+				<interceptor-ref name="admin" />
+			</interceptor-stack>
+
+		</interceptors>
+
+
+		<default-interceptor-ref
+			name="amazinLoginStack" />
+		<default-action-ref name="index"></default-action-ref>
+
+		<global-results>
+			<result name="login-error">index.jsp</result>
+		</global-results>
+
+		<action name="index">
+			<result type="dispatcher">/WEB-INF/content/login-success.jsp</result>
+		</action>
+
+		<action name="register"
+			class="com.miw.presentation.actions.RegisterAction">
+		</action>
+
+		<action name="addtoshoppingcart"
+			class="com.miw.presentation.actions.AddToShoppingCartAction">
+			<result name="success" type="redirectAction">viewshoppingcart.action</result>
+		</action>
+
+		<action name="addtoshoppingcartform"
+			class="com.miw.presentation.actions.AddToShoppingCartFormAction">
+		</action>
+
+		<action name="viewshoppingcart"
+			class="com.miw.presentation.actions.ViewShoppingCartAction">
+			<result name="success">/WEB-INF/content/view-shopping-cart.jsp</result>
+		</action>
+
+		<action name="signout"
+			class="com.miw.presentation.actions.SignOutAction">
+		</action>
+
+		<action name="managebooks"
+			class="com.miw.presentation.actions.ManageBooksAction">
+			<result name="success">/WEB-INF/content/manage-books.jsp</result>
+			<interceptor-ref name="amazinAdminStack" />
+		</action>
+
+		<action name="addbook"
+			class="com.miw.presentation.actions.AddBookAction">
+			<result name="success">/WEB-INF/content/manage-books.jsp</result>
+			<result name="creation-error">/WEB-INF/content/manage-books.jsp</result>
+			<result name="input">/WEB-INF/content/manage-books.jsp</result>
+		</action>
+
+		<action name="updatebook"
+			class="com.miw.presentation.actions.UpdateBookAction">
+			<result name="success">/WEB-INF/content/manage-books.jsp</result>
+			<result name="update-error">/WEB-INF/content/manage-books.jsp</result>
+			<result name="input">/WEB-INF/content/manage-books.jsp</result>
+		</action>
+
+		<action name="buybooks"
+			class="com.miw.presentation.actions.BuyBooksAction">
+			<result name="success" type="redirect">show-books.action</result>
+			<result name="error">/WEB-INF/content/view-shopping-cart.jsp</result>
+			<result name="input">/WEB-INF/content/view-shopping-cart.jsp</result>
+		</action>
+
+	</package>
+
+</struts>
